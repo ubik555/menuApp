@@ -2,12 +2,12 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-
+var ingredients = require("./ingredientsAPI")
 
 /**
  *  Define the sample application.
  */
-var SampleApp = function() {
+var menuAPI = function() {
 
     //  Scope.
     var self = this;
@@ -93,12 +93,9 @@ var SampleApp = function() {
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
-        /*self.routes = { };
+        self.routes = { };
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
+        self.routes['/ingredients'] = ingredients.getIngredients;
 
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
@@ -153,6 +150,6 @@ var SampleApp = function() {
 /**
  *  main():  Main code.
  */
-var zapp = new SampleApp();
+var zapp = new menuAPI ();
 zapp.initialize();
 zapp.start();
