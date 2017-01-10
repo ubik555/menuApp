@@ -95,7 +95,7 @@ var menuAPI = function() {
     self.createRoutes = function() {
         self.routes = { };
 
-        self.routes['/ingredients'] = ingredients.getIngredients;
+        //self.routes['/ingredients'] = ingredients.getIngredients;
 
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
