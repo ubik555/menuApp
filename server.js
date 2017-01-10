@@ -84,7 +84,7 @@ var menuAPI = function() {
 
         self.routes['/ingredients'] = ingredients.getIngredients;
 
-        };
+      
     };
 
 
