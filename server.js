@@ -82,9 +82,9 @@ var menuAPI = function() {
     self.createRoutes = function() {
         self.routes = { };
 
-        self.routes['/ingredients'] = ingredients.getIngredients;
+        self.routes['/ingredients'] = ingredients.get;
 
-      
+
     };
 
 
@@ -94,7 +94,7 @@ var menuAPI = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
