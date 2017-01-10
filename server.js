@@ -2,7 +2,7 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-var ingredients = require('./ingredientsAPI')
+var ingredients = require('ingredientsAPI')
 
 /**
  *  Define the sample application.
