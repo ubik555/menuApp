@@ -2,14 +2,14 @@ var mongoose = require('mongoose')
 var schema = require('./schemas/ingredientSchema.js')
 
 // default to a 'localhost' configuration:
-var connection_string = '127.0.0.1:27017';
+var connection_string = '127.0.0.1:27017/menuapp';
 
 // if OPENSHIFT env variables are present, use the available connection info:
 if(process.env.OPENSHIFT_MONGODB_DB_URL){
-  connection_string = process.env.OPENSHIFT_MONGODB_DB_URL;
+  connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + 'menuapp';
 }
 
-mongoose.connect(connection_string + '/menuapp');
+mongoose.connect(connection_string);
 
 exports.get = function (req, res) {
     var Ingredient = mongoose.model('Ingredient', schema, 'ingredients');
