@@ -1,32 +1,83 @@
-var mongoose = require('mongoose')
-var schema = require('./schemas/ingredientSchema.js')
+var bodyparser = require('body-parser');
+var express = require('express');
+var status = require('http-status');
+var mongoose = require('mongoose');
 
-// default to a 'localhost' configuration:
-var connection_string = '127.0.0.1:27017/menuapp';
+module.exports = function(wagner) {
+  var api = express.Router();
 
-// if OPENSHIFT env variables are present, use the available connection info:
-if(process.env.OPENSHIFT_MONGODB_DB_URL){
-  connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + 'menuapp';
+  api.use(bodyparser.json());
+
+  api.get('/', wagner.invoke(function(Ingredient) {
+    return function(req, res) {
+      console.info("into GET");
+      Ingredient.create({ name: 'Test', vegetarian:true, vegan:true, gluten_free:true });
+      console.info("created test");
+
+      Ingredient.
+      find({}).
+      exec(handleMany.bind(null, 'ingredients', res));
+    };
+  }));
+
+  api.get('/:id', wagner.invoke(function(Ingredient) {
+    return function(req, res) {
+      console.info("GET id: " );
+      Ingredient.findOne({_id: mongoose.Types.ObjectId(req.params.id)},
+        handleOne.bind(null, 'ingredient', res));
+    };
+  }));
+
+  api.post('/', wagner.invoke(function(Ingredient) {
+    return function(req, res) {
+
+        var ingredient = new Ingredient();      // create a new instance
+        console.info("post: " + req.body);
+        ingredient.name = req.body.name;
+        ingredient.vegan = req.body.vegan;
+        ingredient.vegetarian = req.body.vegetarian;
+        ingredient.gluten_free = req.body.gluten_free;
+
+        // save the bear and check for errors
+        ingredient.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json(ingredient);
+        });
+      }
+  }));
+
+  return api;
+};
+
+function handleOne(property, res, error, result) {
+  console.info("RESULT: " +result);
+  if (error) {
+    return res.
+      status(status.INTERNAL_SERVER_ERROR).
+      json({ error: error.toString() });
+  }
+  if (!result) {
+    return res.
+      status(status.NOT_FOUND).
+      json({ error: 'Not found' });
+  }
+
+  var json = {};
+  json[property] = result;
+  res.json(json);
 }
 
-mongoose.connect(connection_string);
+function handleMany(property, res, error, result) {
+  console.info("RESULT: " +result);
+  if (error) {
+    return res.
+      status(status.INTERNAL_SERVER_ERROR).
+      json({ error: error.toString() });
+  }
 
-exports.get = function (req, res) {
-    var Ingredient = mongoose.model('Ingredient', schema, 'ingredients');
-
-    var myIngredient = new Ingredient({
-      name:'salt',
-      vegetarian:true,
-      vegan:true,
-      gluten_free:true
-    });
-
-    myIngredient.save(function(error){
-      if (error){
-        console.log(error);
-        process.exit(1);
-      }
-
-    })
-    res.send('Hello World.')
-  };
+  var json = {};
+  json[property] = result;
+  res.json(json);
+}

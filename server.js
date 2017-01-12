@@ -2,7 +2,9 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-var ingredients = require('./ingredients.js')
+var wagner = require('wagner-core');
+
+require('./models')(wagner);
 
 /**
  *  Define the sample application.
@@ -72,34 +74,14 @@ var menuAPI = function() {
     };
 
 
-    /*  ================================================================  */
-    /*  App server functions (main app logic here).                       */
-    /*  ================================================================  */
-
-    /**
-     *  Create the routing table entries + handlers for the application.
-     */
-    self.createRoutes = function() {
-        self.routes = { };
-
-        self.routes['/ingredients'] = ingredients.get;
-
-
-    };
-
-
     /**
      *  Initialize the server (express) and create the routes and register
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.createRoutes();
         self.app = express();
-
-        //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        }
+        self.app.use('/ingredients', require('./ingredients')(wagner));
+        console.error("Routes Initialized!!!")
     };
 
 
