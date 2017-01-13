@@ -10,10 +10,6 @@ module.exports = function(wagner) {
 
   api.get('/', wagner.invoke(function(Ingredient) {
     return function(req, res) {
-      console.info("into GET");
-      Ingredient.create({ name: 'Test', vegetarian:true, vegan:true, gluten_free:true });
-      console.info("created test");
-
       Ingredient.
       find({}).
       exec(handleMany.bind(null, 'ingredients', res));
@@ -77,7 +73,5 @@ function handleMany(property, res, error, result) {
       json({ error: error.toString() });
   }
 
-  var json = {};
-  json[property] = result;
-  res.json(json);
+  res.json(result);
 }
