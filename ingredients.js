@@ -11,7 +11,7 @@ module.exports = function(wagner) {
   api.get('/', wagner.invoke(function(Ingredient) {
     return function(req, res) {
       Ingredient.
-      find({}).exec(handleMany.bind(null, 'ingredients', res));
+      find().exec(handleMany.bind(null, 'ingredients', res));
     };
   }));
 
