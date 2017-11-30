@@ -1,25 +1,34 @@
 var mongoose = require('mongoose');
-
+var _ = require('underscore');
 module.exports = function(wagner) {
   // default to a 'localhost' configuration:
   var connection_string = '127.0.0.1:27017/menuapp';
-
-  // if OPENSHIFT env variables are present, use the available connection info:
-  if(process.env.OPENSHIFT_MONGODB_DB_URL){
-    connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + 'menuapp';
-  }
 
   mongoose.connect(connection_string);
   console.error("mongoose connected")
 
   var Ingredient =
-    mongoose.model('ingredient', require('./schemas/ingredientSchema'), 'ingredients');
-    
-  wagner.factory('Ingredient', function() {
-    return Ingredient;
+    mongoose.model('Ingredient', require('./schemas/ingredient'), 'ingredients');
+  var Receipt =
+    mongoose.model('Receipt', require('./schemas/receipt'), 'receipt');
+  var Menu =
+    mongoose.model('Menu', require('./schemas/menu'), 'menu');
+  var Meal =
+      mongoose.model('Meal', require('./schemas/meal'), 'meal');
+  var models = {
+      Ingredient: Ingredient,
+      Receipt: Receipt,
+      Meal:Meal,
+      Menu: Menu
+
+  };
+
+  // To ensure DRY-ness, register factories in a loop
+  _.each(models, function(value, key) {
+    wagner.factory(key, function() {
+      return value;
+    });
   });
 
-  return {
-    Ingredient: Ingredient
-  };
+    return models;
 };
