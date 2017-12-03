@@ -1,5 +1,4 @@
-#!/bin/env node
-//  OpenShift sample Node application
+// The server
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs      = require('fs');
