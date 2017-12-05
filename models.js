@@ -6,7 +6,8 @@ module.exports = function(wagner) {
   //mongoose.connect(connection_string);
 
   mongoose.connect(process.env.MONGOLAB_URI, function (error) {
-      if (error) console.error(error);
+      console.log('mongo URI ' + process.env.MONGOLAB_URI);
+      if (error) console.error("Cannot connect to mongoDB:" + error);
       else console.log('mongo connected');
   });
 
