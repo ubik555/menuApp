@@ -19,13 +19,12 @@ var menuAPI = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.app = express();
-        self.app.use(bodyParser.urlencoded({extended:true}));
-        self.app.use(bodyParser.json());
-
-        self.app.use('/api/ingredients', require('./apis/ingredientsApi')(wagner));
-        self.app.use('/api/receipts', require('./apis/receiptsApi')(wagner));
-        self.app.use('/api/menus', require('./apis/menusApi')(wagner));
+        self.app = express()
+          .use(bodyParser.urlencoded({extended:true}))
+          .use(bodyParser.json())
+          .use('/api/ingredients', require('./apis/ingredientsApi')(wagner))
+          .use('/api/receipts', require('./apis/receiptsApi')(wagner))
+          .use('/api/menus', require('./apis/menusApi')(wagner));
 
         console.log("Routes Initialized!!!");
     };
@@ -36,10 +35,12 @@ var menuAPI = function() {
      */
     self.start = function() {
         //  Start the app on the specific interface (and port).
-        self.app.listen(8080, '127.0.0.1', function() {
+        /*self.app.listen(8080, '127.0.0.1', function() {
             console.log('%s: Node server started on %s:%d ...',
                         Date(Date.now() ), '127.0.0.1', 8080);
-        });
+        });*/
+        self.app.use(express.static(__dirname + '/'))
+          .listen(process.env.PORT || 5000);
     };
 
 };   /*  Sample Application.  */

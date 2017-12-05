@@ -2,10 +2,13 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 module.exports = function(wagner) {
   // default to a 'localhost' configuration:
-  var connection_string = '127.0.0.1:27017/menuapp';
+  //var connection_string = '127.0.0.1:27017/menuapp';
+  //mongoose.connect(connection_string);
 
-  mongoose.connect(connection_string);
-  console.error("mongoose connected")
+  mongoose.connect(process.env.MONGOLAB_URI, function (error) {
+      if (error) console.error(error);
+      else console.log('mongo connected');
+  });
 
   var Ingredient =
     mongoose.model('Ingredient', require('./schemas/ingredient'), 'ingredients');
