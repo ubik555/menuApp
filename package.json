@@ -28,6 +28,7 @@
     "http-status": "~0.1.8",
     "mongodb": "2.1.7",
     "mongoose": "~4.0.3",
+    "mongoose-deep-populate": "3.0.0",
     "underscore": "1.5.2",
     "wagner-core": "~0.1.0"
   },
