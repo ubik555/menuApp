@@ -11,7 +11,7 @@ module.exports = function(wagner) {
   });
 
   var Ingredient =
-    mongoose.model('Ingredient', require('./schemas/ingredient'), 'ingredients');
+    mongoose.model('Ingredient', require('./schemas/ingredient'), 'ingredient');
   var Receipt =
     mongoose.model('Receipt', require('./schemas/receipt'), 'receipt');
   var Menu =
